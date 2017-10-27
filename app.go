@@ -52,6 +52,11 @@ func main() {
 		modify.PATCH("/patch/:filename", RenameFile)
 	}
 
+	resize := router.Group("/resize")
+	{
+		resize.GET("/thumbnail/:width/:height/:filename", ResizeThumbnail)
+	}
+
 	// run app
 	router.Run(fmt.Sprintf(Config.Server.Port))
 }

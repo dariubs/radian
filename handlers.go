@@ -3,10 +3,13 @@ package main
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/disintegration/imaging"
 	"io"
 	"net/http"
 	"os"
 	"strings"
+	"strconv"
+	"log"
 )
 
 func Index(c *gin.Context) {
@@ -65,26 +68,53 @@ func UploadByUrl(c *gin.Context) {
 }
 
 func DeleteFile(c *gin.Context) {
-  fileName := c.Param("filename")
-  var err = os.Remove(fileName)
+	fileName := c.Param("filename")
+	var err = os.Remove(fileName)
 	if err != nil {
 		c.String(http.StatusBadRequest, fmt.Sprintf("get form err: %s", err.Error()))
 		return
 	}
 
 	fmt.Println("==> done deleting file")
-  c.String(http.StatusOK, fmt.Sprintf("File %s Deleted.", fileName))
+	c.String(http.StatusOK, fmt.Sprintf("File %s Deleted.", fileName))
 }
 
 func RenameFile(c *gin.Context) {
-  fileName := c.Param("filename")
+	fileName := c.Param("filename")
 	newName := c.Param("newname")
-  err :=  os.Rename(filename, newname)
+	err := os.Rename(fileName, newName)
 	if err != nil {
 		c.String(http.StatusBadRequest, fmt.Sprintf("get form err: %s", err.Error()))
 		return
 	}
 
 	fmt.Println("==> done renaming file")
-  c.String(http.StatusOK, fmt.Sprintf("File %s renamed to %s.", fileName, newName))
+	c.String(http.StatusOK, fmt.Sprintf("File %s renamed to %s.", fileName, newName))
+}
+
+func ResizeThumbnail(c *gin.Context)  {
+	filename := c.Param("filename")
+
+	width, err := strconv.Atoi(c.Param("width"))
+	if err != nil {
+		log.Printf("Error: %s", err)
+		width = 0
+	}
+
+	height, err := strconv.Atoi(c.Param("height"))
+	if err != nil {
+		log.Printf("Error: %s", err)
+		height = 0
+	}
+
+	img, err := imaging.Open(Config.File.Storage + filename)
+	if err != nil {
+		log.Fatalf("Open failed: %v", err)
+		c.String(http.StatusBadRequest, fmt.Sprintf("get form err: %s", err.Error()))
+		return
+	}
+
+	img = imaging.Thumbnail(img, width, height, imaging.CatmullRom)
+
+	imaging.Encode(c.Writer, img, 1)
 }
