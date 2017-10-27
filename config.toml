@@ -1,0 +1,19 @@
+# App config file
+
+# Website name
+title = "Radian"
+description = "Simple image server in golang."
+logo = "/public/img/logo.png"
+
+[file]
+storage = "/data"
+imgmime = [
+  "image/gif",
+  "image/png",
+  "image/jpeg",
+  "image/bmp",
+  "image/webp"
+]
+
+[server]
+port = ":2112"
