@@ -35,11 +35,16 @@ func main() {
 	// go templates
 	router.LoadHTMLGlob("view/*")
 
+	// Basic Auth
+	ba := gin.BasicAuth(gin.Accounts{
+		fmt.Sprintf("%s", Config.User.Accesskey): Config.User.Privatekey,
+	},)
+
 	// routes
 	// TODO: add authentication
 	router.GET("/", route.Index)
 
-	upload := router.Group("/upload")
+	upload := router.Group("/upload", ba)
 	{
 		upload.POST("/sendfile", route.UploadSendFile)
 		upload.POST("/byurl", route.UploadByUrl)
@@ -47,7 +52,7 @@ func main() {
 
 	router.Static("/show", Config.File.Storage)
 
-	modify := router.Group("/modify")
+	modify := router.Group("/modify", ba)
 	{
 		modify.DELETE("/delete/:filename", route.DeleteFile)
 		modify.PATCH("/patch/:filename", route.RenameFile)

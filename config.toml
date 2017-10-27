@@ -17,3 +17,7 @@ imgmime = [
 
 [server]
 port = ":2112"
+
+[user]
+accesskey = "admin"
+privatekey = "123456"

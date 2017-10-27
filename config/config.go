@@ -6,6 +6,7 @@ type CONFIG struct {
 	Logo        string
 	File        FILE
 	Server      SERVER
+	User        USER
 }
 
 type FILE struct {
@@ -15,4 +16,9 @@ type FILE struct {
 
 type SERVER struct {
 	Port string
+}
+
+type USER struct {
+	Accesskey string
+	Privatekey string
 }
