@@ -55,6 +55,8 @@ func main() {
 	resize := router.Group("/resize")
 	{
 		resize.GET("/thumbnail/:width/:height/:filename", ResizeThumbnail)
+		resize.GET("/fit/:width/:height/:filename", ResizeFit)
+		resize.GET("/fill/:width/:height/:filename", ResizeFill)
 	}
 
 	// run app
