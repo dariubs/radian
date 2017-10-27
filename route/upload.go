@@ -1,59 +1,115 @@
 package route
 
-import(
-  "fmt"
+import (
 	"github.com/gin-gonic/gin"
 	"io"
+	"log"
 	"net/http"
 	"os"
 	"strings"
 )
 
 func UploadSendFile(c *gin.Context) {
-	name := c.PostForm("name")
-	email := c.PostForm("email")
+	resp := RESPONSE{}
 
 	// Source
 	file, err := c.FormFile("file")
 	if err != nil {
-		c.String(http.StatusBadRequest, fmt.Sprintf("get form err: %s", err.Error()))
+		log.Printf("Error: %s", err)
+
+		resp.Error.HasError = true
+		resp.Error.ErrorNumber = 1
+		resp.Error.ErrorMessage = "Send incorrect file."
+		c.JSON(
+			http.StatusBadRequest,
+			gin.H{
+				"data": resp,
+			},
+		)
 		return
 	}
 
-	if err := c.SaveUploadedFile(file, Config.File.Storage + file.Filename); err != nil {
-		c.String(http.StatusBadRequest, fmt.Sprintf("upload file err: %s", err.Error()))
+	if err := c.SaveUploadedFile(file, Config.File.Storage+file.Filename); err != nil {
+		log.Printf("Error: %s", err)
+
+		resp.Error.HasError = true
+		resp.Error.ErrorNumber = 1
+		resp.Error.ErrorMessage = "Could not be save."
+		c.JSON(
+			http.StatusBadRequest,
+			gin.H{
+				"data": resp,
+			},
+		)
 		return
 	}
 
-	c.String(http.StatusOK, fmt.Sprintf("File %s uploaded successfully with fields name=%s and email=%s.", file.Filename, name, email))
+	resp.Data.Filename = file.Filename
+	resp.Data.Message = "Upload ok."
+
+	c.JSON(http.StatusOK, gin.H{
+		"data": resp,
+	},
+	)
 }
 
 func UploadByUrl(c *gin.Context) {
+	resp := RESPONSE{}
 	url := c.PostForm("url")
 
 	tokens := strings.Split(url, "/")
-	fileName := tokens[len(tokens)-1]
+	filename := tokens[len(tokens)-1]
 
-	output, err := os.Create(Config.File.Storage + fileName)
+	out, err := os.Create(Config.File.Storage + filename)
 	if err != nil {
-		c.String(http.StatusBadRequest, fmt.Sprintf("get form err: %s", err.Error()))
+		resp.Error.HasError = true
+		resp.Error.ErrorNumber = 1
+		resp.Error.ErrorMessage = "File could not be saved."
+		c.JSON(
+			http.StatusBadRequest,
+			gin.H{
+				"data": resp,
+			},
+		)
 		return
 	}
-	defer output.Close()
+	defer out.Close()
 
 	response, err := http.Get(url)
 	if err != nil {
-		c.String(http.StatusBadRequest, fmt.Sprintf("get form err: %s", err.Error()))
+		resp.Error.HasError = true
+		resp.Error.ErrorNumber = 1
+		resp.Error.ErrorMessage = "Can not get url content."
+		c.JSON(
+			http.StatusBadRequest,
+			gin.H{
+				"data": resp,
+			},
+		)
 		return
 	}
 	defer response.Body.Close()
 
-	_, err = io.Copy(output, response.Body)
+	_, err = io.Copy(out, response.Body)
 	if err != nil {
-		c.String(http.StatusBadRequest, fmt.Sprintf("get form err: %s", err.Error()))
+		resp.Error.HasError = true
+		resp.Error.ErrorNumber = 1
+		resp.Error.ErrorMessage = "Cannot write file."
+		c.JSON(
+			http.StatusBadRequest,
+			gin.H{
+				"data": resp,
+			},
+		)
 		return
 	}
 
-	c.String(http.StatusOK, fmt.Sprintf("File %s uploaded successfully with fields name=%s.", url, fileName))
+	resp.Data.Filename = filename
+	resp.Data.Message = "Upload ok."
+	resp.Data.Filename = url
 
+	c.JSON(http.StatusOK, gin.H{
+		"data": resp,
+	},
+	)
 }

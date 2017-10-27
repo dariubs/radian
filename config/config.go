@@ -4,7 +4,7 @@ type CONFIG struct {
 	Title       string
 	Description string
 	Logo        string
-	File    FILE
+	File        FILE
 	Server      SERVER
 }
 

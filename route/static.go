@@ -1,8 +1,8 @@
 package route
 
-import(
-  "github.com/gin-gonic/gin"
-  "net/http"
+import (
+	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 // index page

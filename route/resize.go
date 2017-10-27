@@ -2,14 +2,14 @@ package route
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"github.com/disintegration/imaging"
+	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
 	"strconv"
-	"log"
 )
 
-func ResizeThumbnail(c *gin.Context)  {
+func ResizeThumbnail(c *gin.Context) {
 	filename := c.Param("filename")
 
 	width, err := strconv.Atoi(c.Param("width"))
@@ -36,7 +36,7 @@ func ResizeThumbnail(c *gin.Context)  {
 	imaging.Encode(c.Writer, img, 1)
 }
 
-func ResizeFit(c *gin.Context)  {
+func ResizeFit(c *gin.Context) {
 	filename := c.Param("filename")
 
 	width, err := strconv.Atoi(c.Param("width"))
@@ -63,7 +63,7 @@ func ResizeFit(c *gin.Context)  {
 	imaging.Encode(c.Writer, img, 1)
 }
 
-func ResizeFill(c *gin.Context)  {
+func ResizeFill(c *gin.Context) {
 	filename := c.Param("filename")
 
 	width, err := strconv.Atoi(c.Param("width"))
