@@ -1,2 +1,2 @@
-# ![Radian](/public/img/logo.png?raw=true "radian")
-simple image server in golang.
+# ![Radian](/public/img/logo.small.png?raw=true "radian")
+Simple image server in golang.

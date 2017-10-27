@@ -7,6 +7,7 @@ import (
 
 	// http router
 	"github.com/gin-gonic/gin"
+	"github.com/dariubs/radian/route"
 
 	// builtin
 	"fmt"
@@ -36,27 +37,27 @@ func main() {
 
 	// routes
 	// TODO: add authentication
-	router.GET("/", Index)
+	router.GET("/", route.Index)
 
 	upload := router.Group("/upload")
 	{
-		upload.POST("/sendfile", UploadSendFile)
-		upload.POST("/byurl", UploadByUrl)
+		upload.POST("/sendfile", route.UploadSendFile)
+		upload.POST("/byurl", route.UploadByUrl)
 	}
 
 	router.Static("/show", Config.File.Storage)
 
 	modify := router.Group("/modify")
 	{
-		modify.DELETE("/delete/:filename", DeleteFile)
-		modify.PATCH("/patch/:filename", RenameFile)
+		modify.DELETE("/delete/:filename", route.DeleteFile)
+		modify.PATCH("/patch/:filename", route.RenameFile)
 	}
 
 	resize := router.Group("/resize")
 	{
-		resize.GET("/thumbnail/:width/:height/:filename", ResizeThumbnail)
-		resize.GET("/fit/:width/:height/:filename", ResizeFit)
-		resize.GET("/fill/:width/:height/:filename", ResizeFill)
+		resize.GET("/thumbnail/:width/:height/:filename", route.ResizeThumbnail)
+		resize.GET("/fit/:width/:height/:filename", route.ResizeFit)
+		resize.GET("/fill/:width/:height/:filename", route.ResizeFill)
 	}
 
 	// run app

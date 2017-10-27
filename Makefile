@@ -1,5 +1,5 @@
 all:
-	go build app.go handlers.go
+	go build app.go
 
 run:
-	go run app.go handlers.go
+	go run app.go
