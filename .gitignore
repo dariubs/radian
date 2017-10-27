@@ -3,4 +3,5 @@ storage/
 ./config.toml
 src/
 bin/
+pkg/
 ./app

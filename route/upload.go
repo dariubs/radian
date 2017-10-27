@@ -9,6 +9,7 @@ import (
 	"strings"
 )
 
+// TODO: save file by specific filename
 func UploadSendFile(c *gin.Context) {
 	resp := RESPONSE{}
 
