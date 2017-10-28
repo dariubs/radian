@@ -2,11 +2,11 @@ package main
 
 import (
 	// config
-	"./config"
+	"github.com/dariubs/radian/config"
 	"github.com/BurntSushi/toml"
 
 	// http router
-	"./route"
+	"github.com/dariubs/radian/route"
 	"github.com/gin-gonic/gin"
 
 	// builtin
@@ -41,7 +41,11 @@ func main() {
 	})
 
 	// routes
-	router.GET("/", route.Index)
+	static := router.Group("/", ba)
+	{
+		static.GET("/", route.Index)
+		static.GET("/upload", route.StaticUpload)
+	}
 
 	upload := router.Group("/upload", ba)
 	{

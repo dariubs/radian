@@ -1,11 +1,14 @@
 package route
 
 import (
+	// http router
 	"github.com/gin-gonic/gin"
+
+	// builtin
 	"net/http"
 )
 
-// static page
+// static pages
 func Index(c *gin.Context) {
 	c.Redirect(http.StatusMovedPermanently, "/upload")
 }

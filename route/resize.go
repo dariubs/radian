@@ -1,9 +1,14 @@
 package route
 
 import (
-	"fmt"
+	// image processor
 	"github.com/disintegration/imaging"
+
+	// http router
 	"github.com/gin-gonic/gin"
+
+	//  builtin
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
