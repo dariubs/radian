@@ -1,7 +1,18 @@
 language: go
+
 go:
   - 1.9
+
+services:
+  - docker
+
 before_install:
   - go get -v -d ./...
+
+install:
+  - docker build -t radian .
+  - docker run -d -p 127.0.0.1:80:2112 --name radian-server radian
+
 script:
   - go test
+  - docker ps | grep -q radian-server
