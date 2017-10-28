@@ -1,6 +1,6 @@
 # [![Radian](/public/img/logo.small.png?raw=true "radian")](https://github.com/dariubs/radian)
 
-[![Build Status](https://travis-ci.org/dariubs/radian.svg?branch=master)](https://travis-ci.org/dariubs/radian)   [![Hound](https://img.shields.io/badge/houndci-golint-ff69b4.svg)](https://houndci.com)
+[![Build Status](https://travis-ci.org/dariubs/radian.svg?branch=master)](https://travis-ci.org/dariubs/radian)   [![Hound](https://img.shields.io/badge/houndci-golint-ff69b4.svg)](https://houndci.com)  [![Apache License](https://img.shields.io/badge/license-Apache-blue.svg)](https://github.com/dariubs/radian/blob/master/license)
 
 Simple image server in golang.
 
