@@ -12,10 +12,12 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"os"
 )
 
 func IsFileExist(file string) bool {
 	if _, err := os.Stat(Config.File.Storage + file); os.IsNotExist(err) {
+		log.Printf("file not exists.")
 		return false
 	}
 	return true
@@ -38,8 +40,8 @@ func ResizeThumbnail(c *gin.Context) {
 
 	exist := IsFileExist(filename)
 
-	if exist {
-		img, err := imaging.Open(Config.File.Default)
+	if exist == false {
+		img, _ := imaging.Open(Config.File.Default)
 
 		img = imaging.Thumbnail(img, width, height, imaging.CatmullRom)
 
@@ -77,7 +79,7 @@ func ResizeFit(c *gin.Context) {
 	exist := IsFileExist(filename)
 
 	if exist {
-		img, err := imaging.Open(Config.File.Default)
+		img, _ := imaging.Open(Config.File.Default)
 
 		img = imaging.Thumbnail(img, width, height, imaging.CatmullRom)
 
@@ -115,7 +117,7 @@ func ResizeFill(c *gin.Context) {
 	exist := IsFileExist(filename)
 
 	if exist {
-		img, err := imaging.Open(Config.File.Default)
+		img, _ := imaging.Open(Config.File.Default)
 
 		img = imaging.Thumbnail(img, width, height, imaging.CatmullRom)
 
