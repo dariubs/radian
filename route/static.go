@@ -5,9 +5,13 @@ import (
 	"net/http"
 )
 
-// index page
+// static page
 func Index(c *gin.Context) {
-	c.HTML(http.StatusOK, "index.html", gin.H{
+	c.Redirect(http.StatusMovedPermanently, "/upload")
+}
+
+func StaticUpload(c *gin.Context) {
+	c.HTML(http.StatusOK, "upload.html", gin.H{
 		"config": Config,
 	})
 }
