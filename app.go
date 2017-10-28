@@ -2,8 +2,8 @@ package main
 
 import (
 	// config
-	"github.com/dariubs/radian/config"
 	"github.com/BurntSushi/toml"
+	"github.com/dariubs/radian/config"
 
 	// http router
 	"github.com/dariubs/radian/route"

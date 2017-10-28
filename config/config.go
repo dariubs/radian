@@ -12,6 +12,7 @@ type CONFIG struct {
 type FILE struct {
 	Storage string
 	Imgmime []string
+	Default string
 }
 
 type SERVER struct {

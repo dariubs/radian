@@ -22,3 +22,27 @@ privatekey = "123456"
 docker build -t radian .
 docker run -d -p 2112:2112 --volume /path/to/your/storage:/data --name radian-server radian
 ```
+
+## routes
+
+### Admin routes
+(*authentication needed*)
+
+Upload from postfile :
+- /upload/sendfile
+
+Upload from url:
+- /upload/byurl
+
+Simple gui for manual upload:
+- /upload
+
+### Public routes
+
+Show file:
+- /show/:filename
+
+Show thumbnail:
+- /resize/thumbnail/:width/:height/:filename
+
+and more ...

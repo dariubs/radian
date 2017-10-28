@@ -6,7 +6,8 @@ description = "Simple image server in golang."
 logo = "/public/img/logo.png"
 
 [file]
-storage = "/data"
+storage = "/data/"
+default = "public/img/default.jpg"
 imgmime = [
   "image/gif",
   "image/png",

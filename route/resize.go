@@ -14,6 +14,13 @@ import (
 	"strconv"
 )
 
+func IsFileExist(file string) bool {
+	if _, err := os.Stat(Config.File.Storage + file); os.IsNotExist(err) {
+		return false
+	}
+	return true
+}
+
 func ResizeThumbnail(c *gin.Context) {
 	filename := c.Param("filename")
 
@@ -27,6 +34,17 @@ func ResizeThumbnail(c *gin.Context) {
 	if err != nil {
 		log.Printf("Error: %s", err)
 		height = 0
+	}
+
+	exist := IsFileExist(filename)
+
+	if exist {
+		img, err := imaging.Open(Config.File.Default)
+
+		img = imaging.Thumbnail(img, width, height, imaging.CatmullRom)
+
+		imaging.Encode(c.Writer, img, 1)
+		return
 	}
 
 	img, err := imaging.Open(Config.File.Storage + filename)
@@ -56,6 +74,17 @@ func ResizeFit(c *gin.Context) {
 		height = 0
 	}
 
+	exist := IsFileExist(filename)
+
+	if exist {
+		img, err := imaging.Open(Config.File.Default)
+
+		img = imaging.Thumbnail(img, width, height, imaging.CatmullRom)
+
+		imaging.Encode(c.Writer, img, 1)
+		return
+	}
+
 	img, err := imaging.Open(Config.File.Storage + filename)
 	if err != nil {
 		log.Fatalf("Open failed: %v", err)
@@ -81,6 +110,17 @@ func ResizeFill(c *gin.Context) {
 	if err != nil {
 		log.Printf("Error: %s", err)
 		height = 0
+	}
+
+	exist := IsFileExist(filename)
+
+	if exist {
+		img, err := imaging.Open(Config.File.Default)
+
+		img = imaging.Thumbnail(img, width, height, imaging.CatmullRom)
+
+		imaging.Encode(c.Writer, img, 1)
+		return
 	}
 
 	img, err := imaging.Open(Config.File.Storage + filename)
