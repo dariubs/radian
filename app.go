@@ -2,11 +2,11 @@ package main
 
 import (
 	// config
+	"./config"
 	"github.com/BurntSushi/toml"
-	"github.com/dariubs/radian/config"
 
 	// http router
-	"github.com/dariubs/radian/route"
+	"./route"
 	"github.com/gin-gonic/gin"
 
 	// builtin
@@ -38,10 +38,9 @@ func main() {
 	// Basic Auth
 	ba := gin.BasicAuth(gin.Accounts{
 		fmt.Sprintf("%s", Config.User.Accesskey): Config.User.Privatekey,
-	},)
+	})
 
 	// routes
-	// TODO: add authentication
 	router.GET("/", route.Index)
 
 	upload := router.Group("/upload", ba)

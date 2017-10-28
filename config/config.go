@@ -19,6 +19,6 @@ type SERVER struct {
 }
 
 type USER struct {
-	Accesskey string
+	Accesskey  string
 	Privatekey string
 }

@@ -9,12 +9,16 @@ import (
 	"strings"
 )
 
-// TODO: save file by specific filename
 func UploadSendFile(c *gin.Context) {
 	resp := RESPONSE{}
 
 	// Source
 	file, err := c.FormFile("file")
+	filename := c.PostForm("filename")
+	if len(c.PostForm("filename")) < 1 {
+		filename = file.Filename
+	}
+
 	if err != nil {
 		log.Printf("Error: %s", err)
 
@@ -30,7 +34,7 @@ func UploadSendFile(c *gin.Context) {
 		return
 	}
 
-	if err := c.SaveUploadedFile(file, Config.File.Storage+file.Filename); err != nil {
+	if err := c.SaveUploadedFile(file, Config.File.Storage + filename); err != nil {
 		log.Printf("Error: %s", err)
 
 		resp.Error.HasError = true
@@ -45,7 +49,7 @@ func UploadSendFile(c *gin.Context) {
 		return
 	}
 
-	resp.Data.Filename = file.Filename
+	resp.Data.Filename = filename
 	resp.Data.Message = "Upload ok."
 
 	c.JSON(http.StatusOK, gin.H{
@@ -57,10 +61,12 @@ func UploadSendFile(c *gin.Context) {
 func UploadByUrl(c *gin.Context) {
 	resp := RESPONSE{}
 	url := c.PostForm("url")
+	filename := c.PostForm("filename")
 
 	tokens := strings.Split(url, "/")
-	filename := tokens[len(tokens)-1]
-
+	if len(c.PostForm("filename")) < 1 {
+		filename = tokens[len(tokens)-1]
+	}
 	out, err := os.Create(Config.File.Storage + filename)
 	if err != nil {
 		resp.Error.HasError = true
@@ -107,7 +113,7 @@ func UploadByUrl(c *gin.Context) {
 
 	resp.Data.Filename = filename
 	resp.Data.Message = "Upload ok."
-	resp.Data.Filename = url
+	resp.Data.Url = url
 
 	c.JSON(http.StatusOK, gin.H{
 		"data": resp,

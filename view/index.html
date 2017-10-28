@@ -15,9 +15,9 @@
 
     <form action="/upload/sendfile" method="post" enctype="multipart/form-data">
       <h1>Upload file</h1>
-      <input type="text" name="filename">
-      <br>
       <input type="file" name="file">
+      <br>
+      <input type="text" name="filename">
       <br>
       <input type="submit">
     </form>
@@ -25,6 +25,9 @@
     <form action="/upload/byurl" method="post">
       <h1>Upload from URL</h1>
       <input type="text" name="url">
+      <br>
+      <input type="text" name="filename">
+      <br>
       <input type="submit">
     </form>
   </body>
