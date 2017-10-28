@@ -1,33 +1,67 @@
 package route
 
 import (
-	"fmt"
+	"log"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"os"
 )
 
 func DeleteFile(c *gin.Context) {
-	fileName := c.Param("filename")
-	var err = os.Remove(Config.File.Storage + fileName)
+	resp := RESPONSE{}
+
+	filename := c.Param("filename")
+
+	var err = os.Remove(Config.File.Storage + filename)
 	if err != nil {
-		c.String(http.StatusBadRequest, fmt.Sprintf("get form err: %s", err.Error()))
+		log.Printf("Error: %s", err)
+
+		resp.Error.HasError = true
+		resp.Error.ErrorNumber = 1
+		resp.Error.ErrorMessage = "Cannot remove file."
+		c.JSON(
+			http.StatusBadRequest,
+			gin.H{
+				"data": resp,
+			},
+		)
 		return
 	}
 
-	fmt.Println("==> done deleting file")
-	c.String(http.StatusOK, fmt.Sprintf("File %s Deleted.", fileName))
+	resp.Data.Filename = filename
+	resp.Data.Message = "Remove ok."
+
+	c.JSON(http.StatusOK, gin.H{
+		"data": resp,
+	})
 }
 
 func RenameFile(c *gin.Context) {
-	fileName := c.Param("filename")
-	newName := c.Param("newname")
-	err := os.Rename(Config.File.Storage+fileName, Config.File.Storage+newName)
+	resp := RESPONSE{}
+
+	filename := c.Param("filename")
+	newname := c.Param("newname")
+
+	var err = os.Rename(Config.File.Storage+filename, Config.File.Storage+newname)
 	if err != nil {
-		c.String(http.StatusBadRequest, fmt.Sprintf("get form err: %s", err.Error()))
+		log.Printf("Error: %s", err)
+
+		resp.Error.HasError = true
+		resp.Error.ErrorNumber = 1
+		resp.Error.ErrorMessage = "Cannot rename file."
+		c.JSON(
+			http.StatusBadRequest,
+			gin.H{
+				"data": resp,
+			},
+		)
 		return
 	}
 
-	fmt.Println("==> done renaming file")
-	c.String(http.StatusOK, fmt.Sprintf("File %s renamed to %s.", fileName, newName))
+	resp.Data.Filename = newname
+	resp.Data.Message = "Rename ok."
+
+	c.JSON(http.StatusOK, gin.H{
+		"data": resp,
+	})
 }

@@ -34,7 +34,7 @@ func UploadSendFile(c *gin.Context) {
 		return
 	}
 
-	if err := c.SaveUploadedFile(file, Config.File.Storage + filename); err != nil {
+	if err := c.SaveUploadedFile(file, Config.File.Storage+filename); err != nil {
 		log.Printf("Error: %s", err)
 
 		resp.Error.HasError = true
