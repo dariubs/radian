@@ -7,22 +7,41 @@ import (
 	// http router
 	"github.com/gin-gonic/gin"
 
-	//  builtin
-	"fmt"
 	// "io/ioutil"
 	"log"
 	"net/http"
 	"strconv"
 )
 
-func ResizeThumbnailOnTheFly(c *gin.Context) {
+func ShowOnTheFly(c *gin.Context) {
 	url := c.Query("url")
 
 	urlresp, err := http.Get(url)
 	if err != nil {
 		log.Printf("Error: %s", err)
+
+		img, _ := imaging.Open(Config.File.Default)
+
+		imaging.Encode(c.Writer, img, 1)
+		return
 	}
 	defer urlresp.Body.Close()
+
+	img, err := imaging.Decode(urlresp.Body)
+	if err != nil {
+		log.Fatalf("Open failed: %v", err)
+
+		img, _ := imaging.Open(Config.File.Default)
+
+		imaging.Encode(c.Writer, img, 1)
+		return
+	}
+
+	imaging.Encode(c.Writer, img, 1)
+}
+
+func ResizeThumbnailOnTheFly(c *gin.Context) {
+	url := c.Query("url")
 
 	width, err := strconv.Atoi(c.Param("width"))
 	if err != nil {
@@ -36,10 +55,28 @@ func ResizeThumbnailOnTheFly(c *gin.Context) {
 		height = 0
 	}
 
+	urlresp, err := http.Get(url)
+	if err != nil {
+		log.Printf("Error: %s", err)
+
+		img, _ := imaging.Open(Config.File.Default)
+
+		img = imaging.Thumbnail(img, width, height, imaging.CatmullRom)
+
+		imaging.Encode(c.Writer, img, 1)
+		return
+	}
+	defer urlresp.Body.Close()
+
 	img, err := imaging.Decode(urlresp.Body)
 	if err != nil {
 		log.Fatalf("Open failed: %v", err)
-		c.String(http.StatusBadRequest, fmt.Sprintf("get form err: %s", err.Error()))
+
+		img, _ := imaging.Open(Config.File.Default)
+
+		img = imaging.Thumbnail(img, width, height, imaging.CatmullRom)
+
+		imaging.Encode(c.Writer, img, 1)
 		return
 	}
 

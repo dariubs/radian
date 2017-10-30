@@ -70,6 +70,7 @@ func main() {
 
 	fly := router.Group("/fly")
 	{
+		fly.GET("/show", route.ShowOnTheFly)
 		fly.GET("/thumbnail/:width/:height", route.ResizeThumbnailOnTheFly)
 	}
 
