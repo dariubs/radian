@@ -68,6 +68,11 @@ func main() {
 		resize.GET("/fill/:width/:height/:filename", route.ResizeFill)
 	}
 
+	fly := router.Group("/fly")
+	{
+		fly.GET("/thumbnail/:width/:height", route.ResizeThumbnailOnTheFly)
+	}
+
 	// run app
 	router.Run(fmt.Sprintf(Config.Server.Port))
 }
