@@ -3,6 +3,7 @@ package route
 import (
 	// image processor
 	"github.com/disintegration/imaging"
+	"gopkg.in/h2non/filetype.v1"
 
 	// http router
 	"github.com/gin-gonic/gin"
@@ -13,6 +14,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"io/ioutil"
 )
 
 func IsFileExist(file string) bool {
@@ -49,16 +51,38 @@ func ResizeThumbnail(c *gin.Context) {
 		return
 	}
 
-	img, err := imaging.Open(Config.File.Storage + filename)
-	if err != nil {
-		log.Fatalf("Open failed: %v", err)
-		c.String(http.StatusBadRequest, fmt.Sprintf("get form err: %s", err.Error()))
+	// open file
+	buf, _ := ioutil.ReadFile(Config.File.Storage + filename)
+
+	// check filetype
+	if filetype.IsImage(buf) {
+		img, err := imaging.Open(Config.File.Storage + filename)
+
+		if err != nil {
+			log.Printf("Decode image failed: %v", err)
+
+			img, _ := imaging.Open(Config.File.Default)
+
+			img = imaging.Thumbnail(img, width, height, imaging.CatmullRom)
+
+			imaging.Encode(c.Writer, img, 1)
+			return
+		}
+
+		img = imaging.Thumbnail(img, width, height, imaging.CatmullRom)
+
+		imaging.Encode(c.Writer, img, 1)
 		return
 	}
+
+	// check file type
+
+	img, _ := imaging.Open(Config.File.Default)
 
 	img = imaging.Thumbnail(img, width, height, imaging.CatmullRom)
 
 	imaging.Encode(c.Writer, img, 1)
+
 }
 
 func ResizeFit(c *gin.Context) {
