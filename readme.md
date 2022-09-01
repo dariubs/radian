@@ -46,3 +46,9 @@ Show thumbnail:
 - /resize/thumbnail/:width/:height/:filename
 
 and more ...
+
+
+License
+--------
+
+Published under [Apache License 2.0](license)
