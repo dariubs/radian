@@ -1,6 +1,6 @@
 # [![Radian](/public/img/logo.small.png?raw=true "radian")](https://github.com/dariubs/radian)
 
-[![Build Status](https://travis-ci.org/dariubs/radian.svg?branch=master)](https://travis-ci.org/dariubs/radian)   [![Hound](https://img.shields.io/badge/houndci-golint-ff69b4.svg)](https://houndci.com)  [![Apache License](https://img.shields.io/badge/license-Apache-blue.svg)](https://github.com/dariubs/radian/blob/master/license)
+[![Apache License](https://img.shields.io/badge/license-Apache-blue.svg)](https://github.com/dariubs/radian/blob/master/license)
 
 Simple image server in golang.
 
@@ -23,27 +23,19 @@ docker build -t radian .
 docker run -d -p 2112:2112 --volume /path/to/your/storage:/data --name radian-server radian
 ```
 
-## routes
-
-### Admin routes
+admin routes
+------------
 (*authentication needed*)
 
-Upload from postfile :
-- /upload/sendfile
+**/upload/sendfile**: Upload from postfile 
+**/upload/byurl**: Upload from url
+**/upload**: Simple gui for manual upload
 
-Upload from url:
-- /upload/byurl
+Public routes
+-------------
 
-Simple gui for manual upload:
-- /upload
-
-### Public routes
-
-Show file:
-- /show/:filename
-
-Show thumbnail:
-- /resize/thumbnail/:width/:height/:filename
+**/show/:filename**: Show file
+**/resize/thumbnail/:width/:height/:filename**: Show thumbnail
 
 and more ...
 
