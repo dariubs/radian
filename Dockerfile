@@ -1,15 +1,18 @@
-FROM golang:1.9
+FROM golang:1.18
 
-ADD . .
+WORKDIR /go/app
 
-# Install dependencies
-RUN go get -v -d ./...
+COPY go.mod ./
+COPY go.sum ./
 
-# Build the app command inside the container.
-RUN make
+RUN go mod download
+
+COPY . .
+
+RUN go build -o /go/radian
 
 # Run the app command by default when the container starts.
-ENTRYPOINT /go/app
+ENTRYPOINT /go/radian
 
 # Document that the service listens on port 2112.
 EXPOSE 2112
