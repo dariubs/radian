@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  radian:
+    build: ./
+    restart: always
+    
+    volumes:
+      - ./data/:/data
+      - ./.env:/app/.env
+    
+    ports:
+      - 2112:2112
+    
+    env_file:
+      - ./.env
